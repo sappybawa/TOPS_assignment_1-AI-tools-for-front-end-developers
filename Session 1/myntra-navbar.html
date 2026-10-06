@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myntra-Style Responsive Navigation Bar</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 6%;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff3f6c;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #ff3f6c;
+        }
+
+        .menu-button {
+            display: none;
+            border: none;
+            background: none;
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        /* Mobile layout */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
+
+            .menu-button {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 62px;
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                gap: 0;
+                background-color: white;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                padding: 15px 20px;
+                border-top: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Prompt used to generate this code:
+    Create a responsive navigation bar for a Myntra-style fashion shopping web app
+    using HTML and CSS. The navigation must contain four links: Home, Explore,
+    Cart, and Profile.
+
+    Desktop requirements:
+    - Display the logo on the left.
+    - Display Home, Explore, Cart, and Profile horizontally.
+    - Use a clean, modern e-commerce style with comfortable spacing.
+    - Add a hover effect to the navigation links.
+
+    Mobile requirements:
+    - Make the navigation responsive for screens 768px wide or smaller.
+    - Show the logo and a hamburger menu button.
+    - Hide the navigation links by default on mobile.
+    - When the hamburger menu is activated, display the four links vertically
+      in a full-width mobile menu.
+
+    Keep the code beginner-friendly, semantic, accessible, and easy to customize.
+    Return the complete HTML file with embedded CSS and minimal JavaScript if
+    necessary.
+    -->
+
+    <header class="navbar">
+        <div class="logo">MyntraStyle</div>
+
+        <button class="menu-button" aria-label="Open navigation menu"
+                onclick="toggleMenu()">☰</button>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Explore</a></li>
+            <li><a href="#">Cart</a></li>
+            <li><a href="#">Profile</a></li>
+        </ul>
+    </header>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("navLinks").classList.toggle("active");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+.playlist-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: min(100%, 22rem);
+  padding: 1rem;
+  color: #20232a;
+  background: #fff;
+  border: 1px solid #e8eaf0;
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgb(28 35 54 / 8%);
+}
+
+.playlist-card__art {
+  display: grid;
+  flex: 0 0 4.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  border-radius: 0.75rem;
+  font-size: 2rem;
+}
+
+.playlist-card__content {
+  min-width: 0;
+}
+
+.playlist-card__title {
+  overflow: hidden;
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.playlist-card__creator,
+.playlist-card__count {
+  margin: 0;
+  color: #687083;
+  font-size: 0.9rem;
+}
+
+.playlist-card__count {
+  margin-top: 0.5rem;
+  color: #7c3aed;
+  font-weight: 600;
+}

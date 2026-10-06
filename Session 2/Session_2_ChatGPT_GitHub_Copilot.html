@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Session 2 – Using ChatGPT & GitHub Copilot for Coding</title>
+<style>
+body{font-family:Arial,sans-serif;line-height:1.6;max-width:1000px;margin:40px auto;padding:0 24px;color:#222}h1,h2,h3{color:#222}.answer{margin-bottom:38px}pre{background:#f5f5f5;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;max-width:100%;box-sizing:border-box;border-radius:6px}table{width:100%;border-collapse:collapse;margin:18px 0}th,td{border:1px solid #bbb;padding:10px;vertical-align:top;text-align:left}th{background:#f2f2f2}.note{background:#f8f8f8;padding:12px;border-left:4px solid #777}
+</style>
+</head>
+<body>
+<h1>Session 2 – Using ChatGPT & GitHub Copilot for Coding</h1>
+
+
+<div class="answer">
+<h2>Task 1 – Generate a React PlaylistCard with GitHub Copilot</h2>
+<p><strong>Objective:</strong> Use GitHub Copilot in VS Code to generate a functional React component named <code>PlaylistCard</code>.</p>
+<h3>Copilot setup</h3>
+<ol>
+<li>Open Visual Studio Code and open the React project folder.</li>
+<li>Sign in to GitHub from VS Code and enable GitHub Copilot. Current VS Code documentation says Copilot can be enabled from the Copilot icon in the Status Bar; eligible users can use Copilot Free or a paid/organization plan. citeturn0search0turn0search10</li>
+<li>Create a file named <code>PlaylistCard.jsx</code>.</li>
+<li>Type a natural-language comment describing the component and accept Copilot's inline suggestion.</li>
+</ol>
+<p><strong>Prompt/comment used with Copilot:</strong></p>
+<pre>// Create a reusable React functional component called PlaylistCard.
+// It should receive playlistName, creator, and songCount as props
+// and display them in a clean card layout.</pre>
+<p><strong>Generated component:</strong></p>
+<pre>function PlaylistCard({ playlistName, creator, songCount }) {
+  return (
+    &lt;article className="playlist-card"&gt;
+      &lt;h2&gt;{playlistName}&lt;/h2&gt;
+      &lt;p&gt;Created by: {creator}&lt;/p&gt;
+      &lt;p&gt;{songCount} songs&lt;/p&gt;
+    &lt;/article&gt;
+  );
+}
+
+export default PlaylistCard;</pre>
+<p>This component is reusable because the displayed values come from props rather than being hard-coded.</p>
+</div>
+
+<div class="answer">
+<h2>Task 2 – Use ChatGPT to Explain a React Product Card Warning</h2>
+<p><strong>Component copied into ChatGPT:</strong></p>
+<pre>function ProductCard({ image, title, price }) {
+  return (
+    &lt;div className="product-card"&gt;
+      &lt;img src={image} /&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      &lt;p&gt;₹{price}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default ProductCard;</pre>
+<p><strong>Prompt sent to ChatGPT:</strong></p>
+<pre>I am building a Flipkart-style React product card. Here is my component:
+
+[paste the component above]
+
+My VS Code/ESLint warning is:
+"img elements must have an alt prop"
+
+Explain why this warning occurs, whether it affects accessibility, and show me the corrected component. Keep the explanation beginner-friendly.</pre>
+<p><strong>Explanation:</strong> The image is missing an <code>alt</code> attribute. Alternative text helps screen readers understand the purpose of an image and also provides useful text when an image cannot be displayed.</p>
+<p><strong>Corrected version:</strong></p>
+<pre>function ProductCard({ image, title, price }) {
+  return (
+    &lt;div className="product-card"&gt;
+      &lt;img src={image} alt={title} /&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      &lt;p&gt;₹{price}&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+export default ProductCard;</pre>
+<p class="note"><strong>Important:</strong> The exact warning shown depends on the ESLint/accessibility rules installed in the React project. When using ChatGPT for debugging, always provide the actual error or warning text instead of guessing.</p>
+</div>
+
+<div class="answer">
+<h2>Task 3 – Prompt for Refactoring a Zomato-Style Restaurant Listing</h2>
+<p><strong>Prompt:</strong></p>
+<pre>I have a React component for a Zomato-style restaurant listing that fetches restaurant data directly inside the component. Refactor it to use a custom reusable hook called useRestaurants.
+
+Requirements:
+1. Move the data-fetching logic into useRestaurants.js.
+2. The hook should manage restaurants, loading, and error state.
+3. The hook should fetch data from /api/restaurants/ using fetch.
+4. The component should only handle rendering the restaurant list and displaying loading/error states.
+5. Do not use unnecessary dependencies.
+6. Keep the code beginner-friendly and explain what each part of the custom hook does.
+7. Return both useRestaurants.js and the refactored RestaurantList.jsx.
+
+Also explain why moving the fetching logic into a custom hook makes the code more reusable.</pre>
+<p><strong>Example refactored hook:</strong></p>
+<pre>import { useEffect, useState } from "react";
+
+function useRestaurants() {
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() =&gt; {
+    fetch("/api/restaurants/")
+      .then((response) =&gt; {
+        if (!response.ok) {
+          throw new Error("Failed to fetch restaurants");
+        }
+        return response.json();
+      })
+      .then((data) =&gt; setRestaurants(data))
+      .catch((error) =&gt; setError(error.message))
+      .finally(() =&gt; setLoading(false));
+  }, []);
+
+  return { restaurants, loading, error };
+}
+
+export default useRestaurants;</pre>
+</div>
+
+<div class="answer">
+<h2>Task 4 – Refactor YouTube Video Fetching with useVideos</h2>
+<p><strong>Before refactoring:</strong> the component contains both the UI and the API-fetching logic.</p>
+<pre>import { useEffect, useState } from "react";
+
+function VideoList() {
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() =&gt; {
+    fetch("/api/videos/")
+      .then((response) =&gt; response.json())
+      .then((data) =&gt; setVideos(data));
+  }, []);
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;YouTube Videos&lt;/h2&gt;
+      {videos.map((video) =&gt; (
+        &lt;p key={video.id}&gt;{video.title}&lt;/p&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+export default VideoList;</pre>
+<p><strong>Copilot instruction:</strong></p>
+<pre>Refactor this React component. Move all video fetching logic into a reusable custom hook called useVideos. The hook should manage videos, loading, and error state. Keep VideoList focused only on displaying the UI. Return the complete useVideos.js and VideoList.jsx files.</pre>
+<p><strong>useVideos.js:</strong></p>
+<pre>import { useEffect, useState } from "react";
+
+function useVideos() {
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() =&gt; {
+    fetch("/api/videos/")
+      .then((response) =&gt; {
+        if (!response.ok) {
+          throw new Error("Failed to fetch videos");
+        }
+        return response.json();
+      })
+      .then((data) =&gt; setVideos(data))
+      .catch((error) =&gt; setError(error.message))
+      .finally(() =&gt; setLoading(false));
+  }, []);
+
+  return { videos, loading, error };
+}
+
+export default useVideos;</pre>
+<p><strong>Refactored VideoList.jsx:</strong></p>
+<pre>import useVideos from "./useVideos";
+
+function VideoList() {
+  const { videos, loading, error } = useVideos();
+
+  if (loading) {
+    return &lt;p&gt;Loading videos...&lt;/p&gt;;
+  }
+
+  if (error) {
+    return &lt;p&gt;Error: {error}&lt;/p&gt;;
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;YouTube Videos&lt;/h2&gt;
+      {videos.map((video) =&gt; (
+        &lt;p key={video.id}&gt;{video.title}&lt;/p&gt;
+      ))}
+    &lt;/div&gt;
+  );
+}
+
+export default VideoList;</pre>
+<p><strong>Result:</strong> The component is now easier to read because fetching, loading, and error-handling logic is reusable in <code>useVideos</code>.</p>
+</div>
+
+<div class="answer">
+<h2>Task 5 – Review of AI-Generated Code</h2>
+<p>After reviewing the ChatGPT/Copilot suggestions, I would make these improvements before using the code in a real project:</p>
+<table>
+<tr><th>Improvement</th><th>Why it is important</th></tr>
+<tr><td><strong>1. Improve naming and prop validation</strong></td><td>Use clear names such as <code>playlistName</code>, <code>creator</code>, and <code>songCount</code>. In a production project, I would also add an appropriate prop-validation approach, such as TypeScript types or PropTypes depending on the project's standards.</td></tr>
+<tr><td><strong>2. Add robust API handling</strong></td><td>Check <code>response.ok</code>, handle network/server errors, show useful loading and error states, and avoid assuming the API will always return valid data.</td></tr>
+</table>
+<p>I would also test the generated code, review accessibility, check security implications, and make sure I understand the code before committing it to the project.</p>
+</div>
+
+<div class="answer">
+<h2>Key Learning</h2>
+<p>ChatGPT and GitHub Copilot can significantly accelerate development by explaining errors, generating starter code, suggesting refactors, and helping create reusable hooks. However, AI-generated code should be treated as a suggestion rather than automatically trusted code. The developer remains responsible for reviewing, testing, securing, and understanding the final implementation.</p>
+<p>Current VS Code documentation similarly emphasizes reviewing AI-generated changes and verifying the result yourself rather than blindly accepting generated code. citeturn0search3turn0search5</p>
+</div>
+
+</body>
+</html>
